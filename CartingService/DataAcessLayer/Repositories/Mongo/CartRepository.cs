@@ -1,6 +1,6 @@
-﻿using CartingService.DataAcessLayer.DatabaseContexts;
-using CartingService.DataAcessLayer.Interfaces;
+﻿using CartingService.DataAcessLayer.DatabaseContexts.MongoDb;
 using CartingService.DataAcessLayer.Models;
+using CartingService.DataAcessLayer.Repositories.Interfaces;
 using MongoDB.Driver;
 
 namespace CartingService.DataAcessLayer.Repositories.Mongo
@@ -9,7 +9,7 @@ namespace CartingService.DataAcessLayer.Repositories.Mongo
     {
         private readonly IMongoCollection<Cart> cartCollection;
 
-        public CartRepository(MongoDbContext context)
+        public CartRepository(CartingDbContext context)
         {
             this.cartCollection = context.GetCollection<Cart>(CollectionNames.CartCollection);
         }

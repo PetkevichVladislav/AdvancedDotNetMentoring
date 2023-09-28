@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using CartingService.BusinessLogicLayer.Interfaces;
-using CartingService.BusinessLogicLayer.Mapping;
-using CartingService.DataAcessLayer.Interfaces;
+using CartingService.BusinessLogicLayer.Services.Interfaces;
+using CartingService.DataAcessLayer.Repositories.Interfaces;
 
 namespace CartingService.BusinessLogicLayer.Services
 {
@@ -10,10 +9,10 @@ namespace CartingService.BusinessLogicLayer.Services
         private readonly IMapper mapper;
         private readonly ICartRepository cartRepository;
 
-        public CartService(ICartRepository cartRepository)
+        public CartService(ICartRepository cartRepository, IMapper mapper)
         {
-            mapper = MapperProvider.GetMapper();
             this.cartRepository = cartRepository;
+            this.mapper = mapper;
         }
 
         public async Task AddLineItemAsync(int cartId, DTO.LineItem lineItem, CancellationToken cancellationToken)

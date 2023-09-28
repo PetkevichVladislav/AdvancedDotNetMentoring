@@ -1,6 +1,7 @@
-using CartingService.BusinessLogicLayer.Interfaces;
+using CartingService.BusinessLogicLayer.Mapping;
 using CartingService.BusinessLogicLayer.Services;
-using CartingService.DataAcessLayer.Interfaces;
+using CartingService.BusinessLogicLayer.Services.Interfaces;
+using CartingService.DataAcessLayer.Repositories.Interfaces;
 using FluentAssertions;
 using Moq;
 
@@ -15,7 +16,7 @@ namespace CartingService.UnitTests.BusinessLogicLayer.Services
         [SetUp]
         public void Setup()
         {
-            cartService = new CartService(cartRepositoryMock.Object);
+            cartService = new CartService(cartRepositoryMock.Object, MapperProvider.GetMapper());
         }
 
         [Test]

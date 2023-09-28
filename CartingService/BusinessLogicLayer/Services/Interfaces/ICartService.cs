@@ -1,6 +1,6 @@
 ﻿using CartingService.BusinessLogicLayer.DTO;
 
-namespace CartingService.BusinessLogicLayer.Interfaces
+namespace CartingService.BusinessLogicLayer.Services.Interfaces
 {
     public interface ICartService
     {

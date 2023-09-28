@@ -1,12 +1,12 @@
 ﻿using MongoDB.Driver;
 
-namespace CartingService.DataAcessLayer.DatabaseContexts
+namespace CartingService.DataAcessLayer.DatabaseContexts.MongoDb
 {
-    internal class MongoDbContext
+    internal class CartingDbContext
     {
         private readonly IMongoDatabase database;
 
-        public MongoDbContext(string connectionString, string databaseName)
+        public CartingDbContext(string connectionString, string databaseName)
         {
             var client = new MongoClient(connectionString);
             database = client.GetDatabase(databaseName);
