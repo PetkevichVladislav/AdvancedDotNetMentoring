@@ -38,7 +38,7 @@ namespace CatalogService.BusinessLogic.UnitTests.Services
                     ParentCategory = null,
                 },
                 CategoryId = 1,
-                Price = 15.3m, 
+                Price = 15.3m,
             };
             productRepositoryMock.Setup(repository => repository.GetByIdAsync(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(expectedResult);
 
