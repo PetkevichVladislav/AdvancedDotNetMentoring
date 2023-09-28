@@ -1,6 +1,6 @@
 ﻿using CartingService.DataAcessLayer.Models;
 
-namespace CartingService.DataAcessLayer.Interfaces
+namespace CartingService.DataAcessLayer.Repositories.Interfaces
 {
     public interface ICartRepository
     {
