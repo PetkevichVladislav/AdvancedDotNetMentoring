@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CatalogService.BusinessLogic.Services.Interfaces;
+using CatalogService.BusinessLogic.Validators;
 using CatalogService.DataAccess.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,6 +42,7 @@ namespace CatalogService.BusinessLogic.Services
             cancellationToken.ThrowIfCancellationRequested();
             ArgumentNullException.ThrowIfNull(product);
 
+            Validate(product);
             var productModel = this.mapper.Map<MODELS.Product>(product);
             await this.productRepository.CreateAsync(productModel, cancellationToken);
         }
@@ -50,6 +52,7 @@ namespace CatalogService.BusinessLogic.Services
             cancellationToken.ThrowIfCancellationRequested();
             ArgumentNullException.ThrowIfNull(product);
 
+            Validate(product);
             var productModel = this.mapper.Map<MODELS.Product>(product);
             await this.productRepository.UpdateAsync(productModel, cancellationToken);
         }
@@ -58,6 +61,16 @@ namespace CatalogService.BusinessLogic.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
             await this.productRepository.DeleteAsync(productId, cancellationToken);
+        }
+
+        private void Validate(DTO.Product product)
+        {
+            var validator = new ProductValidator();
+            var validationResult = validator.Validate(product);
+            if (!validationResult.IsValid)
+            {
+                throw new ArgumentException($"Product is not valid. Errors: {validationResult.Errors}");
+            }
         }
     }
 }

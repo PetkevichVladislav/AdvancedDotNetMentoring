@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CatalogService.BusinessLogic.Services.Interfaces;
+using CatalogService.BusinessLogic.Validators;
 using CatalogService.DataAccess.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,6 +42,7 @@ namespace CatalogService.BusinessLogic.Services
             cancellationToken.ThrowIfCancellationRequested();
             ArgumentNullException.ThrowIfNull(category);
 
+            Validate(category);
             var categoryModel = this.mapper.Map<MODELS.Category>(category);
             await this.categoryRepository.CreateAsync(categoryModel, cancellationToken);
         }
@@ -50,6 +52,7 @@ namespace CatalogService.BusinessLogic.Services
             cancellationToken.ThrowIfCancellationRequested();
             ArgumentNullException.ThrowIfNull(category);
 
+            Validate(category);
             var categoryModel = this.mapper.Map<MODELS.Category>(category);
             await this.categoryRepository.UpdateAsync(categoryModel, cancellationToken);
         }
@@ -59,6 +62,16 @@ namespace CatalogService.BusinessLogic.Services
             cancellationToken.ThrowIfCancellationRequested();
 
             await this.categoryRepository.DeleteAsync(categoryId, cancellationToken);
+        }
+
+        private void Validate(DTO.Category category)
+        {
+            var validator = new CategoryValidator();
+            var validationResult = validator.Validate(category);
+            if (!validationResult.IsValid)
+            {
+                throw new ArgumentException($"Category is not valid. Errors: {validationResult.Errors}");
+            }
         }
     }
 }
