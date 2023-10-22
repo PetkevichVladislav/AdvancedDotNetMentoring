@@ -4,10 +4,12 @@ namespace CartingService.BusinessLogicLayer.Services.Interfaces
 {
     public interface ICartService
     {
-        Task<List<LineItem>> GetLineItemsAsync(int cartId, CancellationToken cancellationToken);
+        Task<List<LineItem>> GetLineItemsAsync(string cartId, CancellationToken cancellationToken);
 
-        Task AddLineItemAsync(int cartId, LineItem lineItem, CancellationToken cancellationToken);
+        Task AddLineItemAsync(string cartId, LineItem lineItem, CancellationToken cancellationToken);
 
-        Task RemoveLineItemAsync(int cartId, int LineIteemId, CancellationToken cancellationToken);
+        Task RemoveLineItemAsync(string cartId, int lineIteemId, CancellationToken cancellationToken);
+
+        Task<Cart> GetCartByIdAsync(string cartId, CancellationToken cancellationToken);
     }
 }

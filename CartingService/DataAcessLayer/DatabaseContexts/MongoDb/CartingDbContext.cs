@@ -2,7 +2,7 @@
 
 namespace CartingService.DataAcessLayer.DatabaseContexts.MongoDb
 {
-    internal class CartingDbContext
+    public class CartingDbContext
     {
         private readonly IMongoDatabase database;
 

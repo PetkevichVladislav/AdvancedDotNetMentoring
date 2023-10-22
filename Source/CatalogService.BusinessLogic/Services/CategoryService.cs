@@ -9,12 +9,14 @@ namespace CatalogService.BusinessLogic.Services
     public class CategoryService : ICategoryService
     {
         private readonly IRepository<MODELS.Category> categoryRepository;
+        private readonly IRepository<MODELS.Product> productRepository;
         private readonly IMapper mapper;
 
-        public CategoryService(IRepository<MODELS.Category> categoryRepository, IMapper mapper)
+        public CategoryService(IRepository<MODELS.Category> categoryRepository, IRepository<MODELS.Product> productRepository, IMapper mapper)
         {
             this.categoryRepository = categoryRepository;
             this.mapper = mapper;
+            this.productRepository = productRepository;
         }
 
         public async Task<DTO.Category> GetByIdAsync(int categoryId, CancellationToken cancellationToken)
@@ -62,6 +64,14 @@ namespace CatalogService.BusinessLogic.Services
             cancellationToken.ThrowIfCancellationRequested();
 
             await this.categoryRepository.DeleteAsync(categoryId, cancellationToken);
+            var productIds = await this.productRepository.GetAll()
+                .Where(product => product.CategoryId == categoryId)
+                .Select(product => product.Id)
+                .ToArrayAsync(cancellationToken);
+            foreach (var productId in productIds)
+            {
+                await this.productRepository.DeleteAsync(productId, cancellationToken);
+            }
         }
 
         private void Validate(DTO.Category category)

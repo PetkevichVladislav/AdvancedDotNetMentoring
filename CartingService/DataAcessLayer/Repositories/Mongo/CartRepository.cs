@@ -5,7 +5,7 @@ using MongoDB.Driver;
 
 namespace CartingService.DataAcessLayer.Repositories.Mongo
 {
-    internal class CartRepository : ICartRepository
+    public class CartRepository : ICartRepository
     {
         private readonly IMongoCollection<Cart> cartCollection;
 
@@ -14,17 +14,27 @@ namespace CartingService.DataAcessLayer.Repositories.Mongo
             this.cartCollection = context.GetCollection<Cart>(CollectionNames.CartCollection);
         }
 
-        public async Task AddLineItemAsync(int cartId, LineItem lineItem, CancellationToken cancellationToken)
+        public async Task AddLineItemAsync(string cartId, LineItem lineItem, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(lineItem);
             cancellationToken.ThrowIfCancellationRequested();
 
             var cart = await GetByIdAsync(cartId, cancellationToken);
-            var existingLineItem = cart.LineItems.FirstOrDefault(existingLineItem => existingLineItem.Id == lineItem.Id);
+            if (cart is null)
+            {
+                cart = new Cart
+                {
+                    Id = cartId,
+                };
+
+                await CreateAsync(cart, cancellationToken);
+            }
+
+            cart.LineItems.Add(lineItem);
             await UpdateAsync(cart, cancellationToken);
         }
 
-        public async Task<List<LineItem>> GetLineItemsAsync(int cartId, CancellationToken cancellationToken)
+        public async Task<List<LineItem>> GetLineItemsAsync(string cartId, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -33,12 +43,12 @@ namespace CartingService.DataAcessLayer.Repositories.Mongo
             return cart.LineItems;
         }
 
-        public async Task RemoveLineItemAsync(int cartId, int LineItemId, CancellationToken cancellationToken)
+        public async Task RemoveLineItemAsync(string cartId, int lineItemId, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             var cart = await GetByIdAsync(cartId, cancellationToken);
-            var lineItem = cart.LineItems.FirstOrDefault(existingLineItem => existingLineItem.Id == LineItemId);
+            var lineItem = cart.LineItems.FirstOrDefault(existingLineItem => existingLineItem.Id == lineItemId);
             if (lineItem is not null)
             {
                 cart.LineItems.Remove(lineItem);
@@ -46,7 +56,7 @@ namespace CartingService.DataAcessLayer.Repositories.Mongo
             }
         }
 
-        private async Task<Cart> GetByIdAsync(int cartId, CancellationToken cancellationToken)
+        public async Task<Cart> GetByIdAsync(string cartId, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -61,6 +71,14 @@ namespace CartingService.DataAcessLayer.Repositories.Mongo
             ArgumentNullException.ThrowIfNull(cartToUpdate);
 
             await cartCollection.ReplaceOneAsync(cart => cart.Id == cartToUpdate.Id, cartToUpdate, cancellationToken: cancellationToken);
+        }
+
+        private async Task CreateAsync(Cart cart, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            ArgumentNullException.ThrowIfNull(cart);
+
+            await cartCollection.InsertOneAsync(cart, cancellationToken: cancellationToken);
         }
     }
 }

@@ -13,11 +13,12 @@ namespace CatalogService.BusinessLogic.UnitTests.Services
         private ICategoryService categoryService = null!;
 
         private readonly Mock<IRepository<MODELS.Category>> categoryRepositoryMock = new();
+        private readonly Mock<IRepository<MODELS.Product>> productRepositoryMock = new();
 
         [SetUp]
         public void Setup()
         {
-            categoryService = new CategoryService(categoryRepositoryMock.Object, MapperProvider.GetMapper());
+            categoryService = new CategoryService(categoryRepositoryMock.Object, productRepositoryMock.Object, MapperProvider.GetMapper());
         }
 
         [Test]
