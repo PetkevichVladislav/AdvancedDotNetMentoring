@@ -1,5 +1,5 @@
 ﻿using CatalogService.BusinessLogic.DTO;
-using CatalogService.BusinessLogic.Services;
+using CatalogService.BusinessLogic.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CatalogService.API.Controllers
@@ -12,12 +12,12 @@ namespace CatalogService.API.Controllers
     public class ProductController : ControllerBase
     {
         private readonly ILogger<ProductController> logger;
-        private readonly ProductService productService;
+        private readonly IProductService productService;
 
         /// <summary>
         /// Creates instance of <see cref="ProductController"/>
         /// </summary>
-        public ProductController(ILogger<ProductController> logger, ProductService productService)
+        public ProductController(ILogger<ProductController> logger, IProductService productService)
         {
             this.logger = logger;
             this.productService = productService;
