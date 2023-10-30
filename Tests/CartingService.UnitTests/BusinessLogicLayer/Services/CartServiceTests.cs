@@ -33,7 +33,7 @@ namespace CartingService.UnitTests.BusinessLogicLayer.Services
                     Price = 1.14m,
                     Image = new()
                     {
-                        Url = new Uri("http://www.images.com/apple"),
+                        Url = "http://www.images.com/apple",
                         AlternativeText = "Apple",
                     },
                 },
@@ -45,15 +45,15 @@ namespace CartingService.UnitTests.BusinessLogicLayer.Services
                     Price = 1.14m,
                     Image = new()
                     {
-                        Url = new Uri("http://www.images.com/apple"),
+                        Url = "http://www.images.com/apple",
                         AlternativeText = "Orange",
                     },
                 },
             };
-            cartRepositoryMock.Setup(repository => repository.GetLineItemsAsync(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(expectedResult);
+            cartRepositoryMock.Setup(repository => repository.GetLineItemsAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(expectedResult);
 
             // Act
-            var actualResult = await this.cartService.GetLineItemsAsync(cartId: 1, CancellationToken.None);
+            var actualResult = await this.cartService.GetLineItemsAsync(cartId: "cart-id", CancellationToken.None);
 
             // Assert
             actualResult.Should().BeEquivalentTo(expectedResult);
@@ -64,10 +64,10 @@ namespace CartingService.UnitTests.BusinessLogicLayer.Services
         {
             // Arrange
             var expectedResult = new List<MODELS.LineItem>();
-            cartRepositoryMock.Setup(repository => repository.GetLineItemsAsync(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(expectedResult);
+            cartRepositoryMock.Setup(repository => repository.GetLineItemsAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(expectedResult);
 
             // Act
-            var actualResult = await this.cartService.GetLineItemsAsync(cartId: 1, CancellationToken.None);
+            var actualResult = await this.cartService.GetLineItemsAsync(cartId: "cart-id", CancellationToken.None);
 
             // Assert
             actualResult.Should().BeEmpty();
@@ -80,7 +80,7 @@ namespace CartingService.UnitTests.BusinessLogicLayer.Services
             var cancelationTokenSource = new CancellationTokenSource();
 
             // Act 
-            var actualResult = async () => await this.cartService.GetLineItemsAsync(cartId: 1, cancelationTokenSource.Token);
+            var actualResult = async () => await this.cartService.GetLineItemsAsync(cartId: "cart-id", cancelationTokenSource.Token);
             cancelationTokenSource.Cancel();
 
             // Assert
@@ -91,7 +91,7 @@ namespace CartingService.UnitTests.BusinessLogicLayer.Services
         public async Task AddLineItemAsync_WhenLineItemIsNull_ShouldThrowArgumentNullException()
         {
             // Act
-            var actualResult = async () => await this.cartService.AddLineItemAsync(cartId: 1, lineItem: null, CancellationToken.None);
+            var actualResult = async () => await this.cartService.AddLineItemAsync(cartId: "cart-id", lineItem: null, CancellationToken.None);
 
             // Assert
             await actualResult.Should().ThrowAsync<ArgumentNullException>();
@@ -104,7 +104,7 @@ namespace CartingService.UnitTests.BusinessLogicLayer.Services
             var cancelationTokenSource = new CancellationTokenSource();
 
             // Act 
-            var actualResult = async () => await this.cartService.AddLineItemAsync(cartId: 1, new DTO.LineItem(), cancelationTokenSource.Token);
+            var actualResult = async () => await this.cartService.AddLineItemAsync(cartId: "cart-id", new DTO.LineItem(), cancelationTokenSource.Token);
             cancelationTokenSource.Cancel();
 
             // Assert
@@ -118,7 +118,7 @@ namespace CartingService.UnitTests.BusinessLogicLayer.Services
             var cancelationTokenSource = new CancellationTokenSource();
 
             // Act 
-            var actualResult = async () => await this.cartService.RemoveLineItemAsync(cartId: 1, LineIteemId: 1, cancelationTokenSource.Token);
+            var actualResult = async () => await this.cartService.RemoveLineItemAsync(cartId: "cart-id", lineIteemId: 1, cancelationTokenSource.Token);
             cancelationTokenSource.Cancel();
 
             // Assert

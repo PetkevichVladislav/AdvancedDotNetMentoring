@@ -27,11 +27,23 @@ namespace CatalogService.BusinessLogic.Services
             return result;
         }
 
-        public async Task<List<DTO.Product>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<List<DTO.Product>> GetAllWithFiltrationAndPaginationAsync(int? categoryId, int? skip, int? take, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var productModels = await this.productRepository.GetAll().ToListAsync(cancellationToken);
+            var productModelsExpression = this.productRepository.GetAll().Where(product => categoryId == null || product.CategoryId == categoryId.Value);
+
+            if (skip is not null)
+            {
+                productModelsExpression.Skip(skip.Value);
+            }
+
+            if (take is not null)
+            {
+                productModelsExpression.Take(take.Value);
+            }
+
+            var productModels = await productModelsExpression.ToListAsync();
             var result = this.mapper.Map<List<DTO.Product>>(productModels);
 
             return result;

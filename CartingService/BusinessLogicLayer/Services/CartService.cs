@@ -17,7 +17,7 @@ namespace CartingService.BusinessLogicLayer.Services
             this.mapper = mapper;
         }
 
-        public async Task AddLineItemAsync(int cartId, DTO.LineItem lineItem, CancellationToken cancellationToken)
+        public async Task AddLineItemAsync(string cartId, DTO.LineItem lineItem, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             ArgumentNullException.ThrowIfNull(lineItem);
@@ -27,9 +27,7 @@ namespace CartingService.BusinessLogicLayer.Services
             await this.cartRepository.AddLineItemAsync(cartId, lineItemModel, cancellationToken);
         }
 
-        
-
-        public async Task<List<DTO.LineItem>> GetLineItemsAsync(int cartId, CancellationToken cancellationToken)
+        public async Task<List<DTO.LineItem>> GetLineItemsAsync(string cartId, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -39,11 +37,21 @@ namespace CartingService.BusinessLogicLayer.Services
             return lineItems;
         }
 
-        public async Task RemoveLineItemAsync(int cartId, int LineIteemId, CancellationToken cancellationToken)
+        public async Task<DTO.Cart> GetCartByIdAsync(string cartId, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            await this.cartRepository.RemoveLineItemAsync(cartId, LineIteemId, cancellationToken);
+            var cartModel = await this.cartRepository.GetByIdAsync(cartId, cancellationToken);
+            var cart = mapper.Map<DTO.Cart>(cartModel);
+
+            return cart;
+        }
+
+        public async Task RemoveLineItemAsync(string cartId, int lineIteemId, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            await this.cartRepository.RemoveLineItemAsync(cartId, lineIteemId, cancellationToken);
         }
 
         private void ValidateLineItem(LineItem lineItem)
