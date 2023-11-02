@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\CartingService\CartingService.csproj" />
+    <ProjectReference Include="..\..\Source\CartingService\CartingService.csproj" />
   </ItemGroup>
 
 </Project>
