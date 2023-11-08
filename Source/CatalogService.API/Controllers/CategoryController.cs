@@ -1,5 +1,7 @@
+using Azure.Messaging.ServiceBus;
 using CatalogService.BusinessLogic.DTO;
 using CatalogService.BusinessLogic.Services.Interfaces;
+using MessgingService.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CartingService.API.Controllers
@@ -11,14 +13,16 @@ namespace CartingService.API.Controllers
     [Route("[controller]")]
     public class CategoryController : ControllerBase
     {
+        private readonly Receiver _reciever;
         private readonly ILogger<CategoryController> logger;
         private readonly ICategoryService categoryService;
 
         /// <summary>
         /// Creates instance of <see cref="CategoryController"/>
         /// </summary>
-        public CategoryController(ILogger<CategoryController> logger, ICategoryService categoryService)
+        public CategoryController(Receiver reciever, ILogger<CategoryController> logger, ICategoryService categoryService)
         {
+            _reciever = reciever;
             this.logger = logger;
             this.categoryService = categoryService;
         }

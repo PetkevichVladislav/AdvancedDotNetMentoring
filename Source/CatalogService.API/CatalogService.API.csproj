@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CatalogService.BusinessLogic\CatalogService.BusinessLogic.csproj" />
     <ProjectReference Include="..\CatalogService.DataAccess\CatalogService.DataAccess.csproj" />
+    <ProjectReference Include="..\MessgingService\MessgingService.csproj" />
   </ItemGroup>
 
 </Project>

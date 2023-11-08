@@ -22,11 +22,10 @@ namespace CartingService.Infrastructure
 
         private static void AddMongoDb(this IServiceCollection services, ConfigurationManager configuration)
         {
-            configuration.GetConnectionString("DefaultConnection");
             var mongoDbSection = configuration.GetSection("MongoDB");
             var connectionString = mongoDbSection.GetSection("ConnectionString").Value;
             var databaseName = mongoDbSection.GetSection("DatabaseName").Value;
-            services.AddSingleton(typeof(CartingDbContext), new CartingDbContext(connectionString, databaseName));
+            services.AddSingleton(typeof(CartingDbContext), new CartingDbContext(connectionString!, databaseName!));
         }
     }
 }
