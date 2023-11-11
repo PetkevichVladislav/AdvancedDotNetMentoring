@@ -10,11 +10,13 @@ namespace CatalogService.BusinessLogic.Services
     {
         private readonly IRepository<MODELS.Product> productRepository;
         private readonly IMapper mapper;
+        private readonly IProductNotificationService productNotificationService;
 
-        public ProductService(IRepository<MODELS.Product> productRepository, IMapper mapper)
+        public ProductService(IRepository<MODELS.Product> productRepository, IMapper mapper, IProductNotificationService productNotificationService )
         {
             this.productRepository = productRepository;
             this.mapper = mapper;
+            this.productNotificationService = productNotificationService;
         }
 
         public async Task<DTO.Product> GetByIdAsync(int productId, CancellationToken cancellationToken)
@@ -67,6 +69,8 @@ namespace CatalogService.BusinessLogic.Services
             Validate(product);
             var productModel = this.mapper.Map<MODELS.Product>(product);
             await this.productRepository.UpdateAsync(productModel, cancellationToken);
+            var updatedProduct = this.mapper.Map<DTO.Product>(productModel);
+            productNotificationService.PublishProductUpdateNotification(updatedProduct);
         }
 
         public async Task DeleteAsync(int productId, CancellationToken cancellationToken)

@@ -15,6 +15,7 @@ namespace CatalogService.BusinessLogic.Infrastructure
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddSingleton<IProductNotificationService, ProductNotificationService>();
             services.AddSingleton(typeof(IMapper), MapperProvider.GetMapper());
         }
     }

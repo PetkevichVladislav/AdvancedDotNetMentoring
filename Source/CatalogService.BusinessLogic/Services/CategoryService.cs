@@ -39,7 +39,7 @@ namespace CatalogService.BusinessLogic.Services
             return result;
         }
 
-        public async Task CreateAsync(DTO.Category category, CancellationToken cancellationToken)
+        public async Task<DTO.Category> CreateAsync(DTO.Category category, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             ArgumentNullException.ThrowIfNull(category);
@@ -47,9 +47,11 @@ namespace CatalogService.BusinessLogic.Services
             Validate(category);
             var categoryModel = this.mapper.Map<MODELS.Category>(category);
             await this.categoryRepository.CreateAsync(categoryModel, cancellationToken);
+
+            return this.mapper.Map<DTO.Category>(categoryModel);
         }
 
-        public async Task UpdateAsync(DTO.Category category, CancellationToken cancellationToken)
+        public async Task<DTO.Category> UpdateAsync(DTO.Category category, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             ArgumentNullException.ThrowIfNull(category);
@@ -57,6 +59,8 @@ namespace CatalogService.BusinessLogic.Services
             Validate(category);
             var categoryModel = this.mapper.Map<MODELS.Category>(category);
             await this.categoryRepository.UpdateAsync(categoryModel, cancellationToken);
+
+            return this.mapper.Map<DTO.Category>(categoryModel);
         }
 
         public async Task DeleteAsync(int categoryId, CancellationToken cancellationToken)

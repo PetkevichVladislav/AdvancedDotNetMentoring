@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CatalogService.DataAccess\CatalogService.DataAccess.csproj" />
+    <ProjectReference Include="..\MessgingService\MessagingService.csproj" />
   </ItemGroup>
 
 </Project>

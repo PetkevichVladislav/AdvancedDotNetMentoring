@@ -4,6 +4,6 @@ namespace MessgingService.Services.Interfaces
 {
     public interface IPublisher
     {
-        Task PublishAsync<TMessage>(TMessage message, CancellationToken cancellationToken) where TMessage : Message;
+        Task PublishAsync<TMessage>(TMessage message, CancellationToken cancellationToken = default) where TMessage : Message;
     }
 }

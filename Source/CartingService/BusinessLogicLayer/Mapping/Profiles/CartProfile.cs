@@ -12,6 +12,9 @@ namespace CartingService.BusinessLogicLayer.Mapping.Profiles
             CreateMap<DTO.LineItem, MODELS.LineItem>()
                 .ReverseMap();
 
+            CreateMap<DTO.LineItemInfo, MODELS.LineItemInfo>()
+                .ReverseMap();
+
             CreateMap<DTO.Image, MODELS.Image>()
                 .ReverseMap();
         }

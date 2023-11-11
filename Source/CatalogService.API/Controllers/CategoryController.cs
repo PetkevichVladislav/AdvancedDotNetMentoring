@@ -63,9 +63,9 @@ namespace CartingService.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Category>> AddAsync([FromBody] Category category, CancellationToken cancellationToken = default)
         {
-            await categoryService.CreateAsync(category, cancellationToken);
+            var result = await categoryService.CreateAsync(category, cancellationToken);
 
-            return Ok(category);
+            return Ok(result);
         }
 
         /// <summary>
@@ -77,9 +77,9 @@ namespace CartingService.API.Controllers
         [HttpPut]
         public async Task<ActionResult<Category>> UpdateAsync([FromBody] Category category, CancellationToken cancellationToken = default)
         {
-            await categoryService.CreateAsync(category, cancellationToken);
+            var result = await categoryService.UpdateAsync(category, cancellationToken);
 
-            return Ok(category);
+            return Ok(result);
         }
 
         /// <summary>

@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Tests\CartingService.UnitTests\CartingService.UnitTests.csproj" />
     <ProjectReference Include="..\CartingService\CartingService.csproj" />
+    <ProjectReference Include="..\MessgingService\MessagingService.csproj" />
   </ItemGroup>
 
 </Project>

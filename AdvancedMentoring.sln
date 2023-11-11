@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatalogService.API", "Sourc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CartingService", "Source\CartingService\CartingService.csproj", "{E8F2194A-D371-4BCE-A540-05AD66736952}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessgingService", "Source\MessgingService\MessgingService.csproj", "{1B79AEDA-7B3F-4010-908C-AFD3945ACE2E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingService", "Source\MessgingService\MessagingService.csproj", "{1B79AEDA-7B3F-4010-908C-AFD3945ACE2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

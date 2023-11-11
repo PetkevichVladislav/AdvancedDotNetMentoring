@@ -4,6 +4,8 @@
     {
         public int Id { get; set; }
 
+        public int ProductId { get; set; }
+
         public string? Name { get; init; }
 
         public Image? Image { get; init; }

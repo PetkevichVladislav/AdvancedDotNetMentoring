@@ -17,6 +17,8 @@ namespace CartingService.Infrastructure
             services.AddMongoDb(configuration);
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<ILineItemService, LineItemService>();
+            services.AddScoped<IMessagesReceiverService, MessagesReceiverService>();
             services.AddSingleton(typeof(IMapper), MapperProvider.GetMapper());
         }
 

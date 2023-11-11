@@ -14,6 +14,7 @@ namespace CatalogService.BusinessLogic.Mapping
                 configuration.AllowNullDestinationValues = true;
                 configuration.AddProfile<CategoryProfile>();
                 configuration.AddProfile<ProductProfile>();
+                configuration.AddProfile<MessagesProfile>();
             });
         }
 
