@@ -17,10 +17,10 @@ namespace CatalogService.BusinessLogic.Services
             this.mapper = mapper;
         }
 
-        public void PublishProductUpdateNotification(Product product)
+        public async Task PublishProductUpdateNotification(Product product)
         {
             var message = mapper.Map<UpdateProductMessage>(product);
-            ThreadPool.QueueUserWorkItem(async callback => await publisher.PublishAsync(message));
+            await publisher.PublishAsync(message);
         }
     }
 }

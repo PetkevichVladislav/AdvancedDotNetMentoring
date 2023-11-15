@@ -70,7 +70,7 @@ namespace CatalogService.BusinessLogic.Services
             var productModel = this.mapper.Map<MODELS.Product>(product);
             await this.productRepository.UpdateAsync(productModel, cancellationToken);
             var updatedProduct = this.mapper.Map<DTO.Product>(productModel);
-            productNotificationService.PublishProductUpdateNotification(updatedProduct);
+            await productNotificationService.PublishProductUpdateNotification(updatedProduct).ConfigureAwait(false);
         }
 
         public async Task DeleteAsync(int productId, CancellationToken cancellationToken)

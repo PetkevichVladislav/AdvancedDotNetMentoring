@@ -6,12 +6,10 @@ namespace MessgingService.Services
     public class Receiver : IReceiver, IAsyncDisposable
     {
         private readonly ServiceBusProcessor processor;
-        private readonly ServiceBusClient client;
 
-        public Receiver(ServiceBusProcessor processor, ServiceBusClient client)
+        public Receiver(ServiceBusProcessor processor)
         {
             this.processor = processor;
-            this.client = client;
         }
 
         public async Task AssignProcessorAndStartProcessAsync(
@@ -29,7 +27,6 @@ namespace MessgingService.Services
         public async ValueTask DisposeAsync()
         {
             await processor.DisposeAsync();
-            await client.DisposeAsync();
         }
     }
 }

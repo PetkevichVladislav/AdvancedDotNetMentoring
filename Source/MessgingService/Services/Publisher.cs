@@ -8,12 +8,10 @@ namespace MessgingService.Services
     public class Publisher : IPublisher, IAsyncDisposable
     {
         private readonly ServiceBusSender sender;
-        private readonly ServiceBusClient client;
 
-        public Publisher(ServiceBusSender sender, ServiceBusClient client)
+        public Publisher(ServiceBusSender sender)
         {
             this.sender = sender;
-            this.client = client;
         }
 
         public async Task PublishAsync<TMessage>(TMessage message, CancellationToken cancellationToken = default) where TMessage : Message
@@ -32,7 +30,6 @@ namespace MessgingService.Services
 
         public async ValueTask DisposeAsync()
         {
-            await client.DisposeAsync().ConfigureAwait(false);
             await sender.DisposeAsync().ConfigureAwait(false);
         }
     }

@@ -4,6 +4,6 @@ namespace CatalogService.BusinessLogic.Services.Interfaces
 {
     public interface IProductNotificationService
     {
-        void PublishProductUpdateNotification(Product product);
+        Task PublishProductUpdateNotification(Product product);
     }
 }
