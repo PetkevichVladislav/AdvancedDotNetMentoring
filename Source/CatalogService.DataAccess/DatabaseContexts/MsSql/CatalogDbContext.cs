@@ -10,7 +10,10 @@ namespace CatalogService.DataAccess.DatabaseContexts.MsSql
 
         public DbSet<Product> Products { get; set; }
 
-        public CatalogDbContext(DbContextOptions options) : base(options) { }
+        public CatalogDbContext(DbContextOptions options) : base(options) 
+        {
+            Database.EnsureCreated();
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

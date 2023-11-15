@@ -10,6 +10,8 @@ namespace CartingService.DataAcessLayer.Repositories.Interfaces
 
         Task RemoveLineItemAsync(string cartId, int lineItemId, CancellationToken cancellationToken);
 
+        Task UpdateLineItemsByProductIdAsync(int productId, LineItemInfo lineItemInfo, CancellationToken cancellationToken);
+
         Task<Cart> GetByIdAsync(string cartId, CancellationToken cancellationToken);
     }
 }

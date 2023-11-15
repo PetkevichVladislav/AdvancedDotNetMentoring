@@ -6,9 +6,9 @@
 
         Task<List<DTO.Category>> GetAllAsync(CancellationToken cancellationToken);
 
-        Task CreateAsync(DTO.Category category, CancellationToken cancellationToken);
+        Task<DTO.Category> CreateAsync(DTO.Category category, CancellationToken cancellationToken);
 
-        Task UpdateAsync(DTO.Category category, CancellationToken cancellationToken);
+        Task<DTO.Category> UpdateAsync(DTO.Category category, CancellationToken cancellationToken);
 
         Task DeleteAsync(int categoryId, CancellationToken cancellationToken);
     }

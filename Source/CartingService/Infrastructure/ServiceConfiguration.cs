@@ -17,16 +17,17 @@ namespace CartingService.Infrastructure
             services.AddMongoDb(configuration);
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<ILineItemService, LineItemService>();
+            services.AddScoped<IMessagesReceiverService, MessagesReceiverService>();
             services.AddSingleton(typeof(IMapper), MapperProvider.GetMapper());
         }
 
         private static void AddMongoDb(this IServiceCollection services, ConfigurationManager configuration)
         {
-            configuration.GetConnectionString("DefaultConnection");
             var mongoDbSection = configuration.GetSection("MongoDB");
             var connectionString = mongoDbSection.GetSection("ConnectionString").Value;
             var databaseName = mongoDbSection.GetSection("DatabaseName").Value;
-            services.AddSingleton(typeof(CartingDbContext), new CartingDbContext(connectionString, databaseName));
+            services.AddSingleton(typeof(CartingDbContext), new CartingDbContext(connectionString!, databaseName!));
         }
     }
 }

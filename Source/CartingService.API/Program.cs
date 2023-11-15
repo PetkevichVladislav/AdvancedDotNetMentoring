@@ -1,7 +1,10 @@
+using Azure.Messaging.ServiceBus;
 using CartingService.API.Infrastructure.HATEOAS;
 using CartingService.API.Infrastructure.Middleware.ExceptionMiddleware;
 using CartingService.API.Infrastructure.Swagger;
+using CartingService.BusinessLogicLayer.Services.Interfaces;
 using CartingService.Infrastructure;
+using MessgingService.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
@@ -22,6 +25,17 @@ builder.Services.AddApiVersioning(options =>
     options.DefaultApiVersion = new ApiVersion(1, 0);
     options.ReportApiVersions = true;
 });
+
+var serviceProvider = builder.Services.BuildServiceProvider();
+builder.Services.AddCatalogMessagesReceiver(builder.Configuration, 
+    new List<Func<ProcessMessageEventArgs, Task>>
+    {
+        serviceProvider.GetRequiredService<IMessagesReceiverService>().HandleMessageWithUpdateLineItemMessage,
+    },
+    new List<Func<ProcessErrorEventArgs, Task>>
+    {
+        serviceProvider.GetRequiredService<IMessagesReceiverService>().ErrorMessageHandler,
+    });
 
 using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
     .SetMinimumLevel(LogLevel.Trace)

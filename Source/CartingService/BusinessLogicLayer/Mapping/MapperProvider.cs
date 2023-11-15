@@ -12,6 +12,7 @@ namespace CartingService.BusinessLogicLayer.Mapping
             mapperConfiguration = new MapperConfiguration(configuration =>
             {
                 configuration.AddProfile<CartProfile>();
+                configuration.AddProfile<MessageProfile>();
             });
         }
 

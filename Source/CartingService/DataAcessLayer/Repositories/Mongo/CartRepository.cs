@@ -1,6 +1,9 @@
 ﻿using CartingService.DataAcessLayer.DatabaseContexts.MongoDb;
 using CartingService.DataAcessLayer.Models;
 using CartingService.DataAcessLayer.Repositories.Interfaces;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 
 namespace CartingService.DataAcessLayer.Repositories.Mongo
@@ -12,6 +15,12 @@ namespace CartingService.DataAcessLayer.Repositories.Mongo
         public CartRepository(CartingDbContext context)
         {
             this.cartCollection = context.GetCollection<Cart>(CollectionNames.CartCollection);
+
+            BsonClassMap.RegisterClassMap<LineItem>(cm =>
+            {
+                cm.AutoMap();
+                cm.MapMember(c => c.Price).SetSerializer(new DecimalSerializer(BsonType.Decimal128));
+            });
         }
 
         public async Task AddLineItemAsync(string cartId, LineItem lineItem, CancellationToken cancellationToken)
@@ -41,6 +50,18 @@ namespace CartingService.DataAcessLayer.Repositories.Mongo
             var cart = await GetByIdAsync(cartId, cancellationToken);
 
             return cart.LineItems;
+        }
+
+        public async Task UpdateLineItemsByProductIdAsync(int productId, LineItemInfo lineItemInfo, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var filter = Builders<Cart>.Filter.ElemMatch(cart => cart.LineItems, item => item.ProductId == productId);
+            var update = Builders<Cart>.Update.Set("LineItems.$.Name", lineItemInfo.Name)
+                                              .AddToSet("LineItems.$.Price", lineItemInfo.Price)
+                                              .AddToSet("LineItems.$.Image.Url", lineItemInfo.ImageUrl);
+
+            await cartCollection.UpdateManyAsync(filter, update, cancellationToken: cancellationToken);
         }
 
         public async Task RemoveLineItemAsync(string cartId, int lineItemId, CancellationToken cancellationToken)

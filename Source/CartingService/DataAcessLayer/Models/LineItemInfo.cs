@@ -1,15 +1,11 @@
 ﻿namespace CartingService.DataAcessLayer.Models
 {
-    public record LineItem
+    public record LineItemInfo
     {
-        public int Id { get; set; }
-
         public string? Name { get; init; }
 
-        public Image? Image { get; init; }
+        public string? ImageUrl { get; init; }
 
         public decimal Price { get; init; }
-
-        public int Quantity { get; init; }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace CatalogService.BusinessLogic.DTO
+﻿using static System.Net.Mime.MediaTypeNames;
+
+namespace CatalogService.BusinessLogic.DTO
 {
     public record Product
     {
