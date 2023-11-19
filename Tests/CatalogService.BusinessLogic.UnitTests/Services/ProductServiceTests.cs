@@ -1,5 +1,6 @@
 ﻿using CatalogService.BusinessLogic.Mapping;
 using CatalogService.BusinessLogic.Services;
+using CatalogService.BusinessLogic.Services.Interfaces;
 using CatalogService.DataAccess.Repositories.Interfaces;
 using FluentAssertions;
 using Moq;
@@ -15,7 +16,8 @@ namespace CatalogService.BusinessLogic.UnitTests.Services
         [SetUp]
         public void Setup()
         {
-            productService = new ProductService(productRepositoryMock.Object, MapperProvider.GetMapper());
+            var notificationMock = new Mock<IProductNotificationService>();
+            productService = new ProductService(productRepositoryMock.Object, MapperProvider.GetMapper(), notificationMock.Object);
         }
 
         [Test]
