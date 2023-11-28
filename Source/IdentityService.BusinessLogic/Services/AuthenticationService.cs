@@ -1,24 +1,27 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.Data;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using IdentityService.BusinessLogic.DataAccess.Models;
 using IdentityService.BusinessLogic.Interfaces;
 using IdentityService.BusinessLogic.Models;
-using IdentityService.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace IdentityService.BusinessLogic.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly UserManager<User> userManager;
+        private readonly UserManager<UserWithRefreshToken> userManager;
+        private readonly RoleManager<RoleWithPermissions> roleManager;
         private readonly ITokenService tokenService;
 
-        public AuthenticationService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, ITokenService tokenService)
+        public AuthenticationService(UserManager<UserWithRefreshToken> userManager, RoleManager<RoleWithPermissions> roleManager, ITokenService tokenService)
         {
             this.userManager = userManager;
+            this.roleManager = roleManager;
             this.tokenService = tokenService;
         }
 
-        public async Task<AuthorizationModel> LogIn(string username, string password)
+        public async Task<AuthorizationModel> AuthenticateUser(string username, string password)
         {
             var user = await this.userManager.FindByNameAsync(username);
             if (user == null)
@@ -32,7 +35,7 @@ namespace IdentityService.BusinessLogic.Services
                 throw new Exception("Password is incorrect");
             }
 
-            var claims = await CreateClaims(username, user);
+            var claims = await CreateClaims(user);
             var token = tokenService.CreateJwtToken(claims);
             var refreshToken = tokenService.CreateRefreshToken();
             user.RefreshToken = refreshToken.Value;
@@ -47,27 +50,28 @@ namespace IdentityService.BusinessLogic.Services
             };
         }
 
-        public async Task<AuthorizationModel> Register(string username, string password, string email)
+        public async Task<AuthorizationModel> CreateUser(string username, string password, string email)
         {
-          var existingUser = await this.userManager.FindByNameAsync(username);
+            var existingUser = await this.userManager.FindByNameAsync(username);
             if (existingUser is not null)
             {
                 throw new Exception("User with such username already exists");
             }
 
-            User user = new()
+            UserWithRefreshToken user = new()
             {
                 Email = email,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = username,
             };
+
             var result = await userManager.CreateAsync(user, password);
             if (!result.Succeeded)
             {
                 throw new Exception("Could not create user due to internal error.");
             }
 
-            var authorizationModel = await LogIn(username, password);
+            var authorizationModel = await AuthenticateUser(username, password);
 
             return authorizationModel;
         }
@@ -104,16 +108,25 @@ namespace IdentityService.BusinessLogic.Services
             };
         }
 
-        private async Task<List<Claim>> CreateClaims(string username, User user)
+        private async Task<List<Claim>> CreateClaims(UserWithRefreshToken user)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
-            var roles = await this.userManager.GetRolesAsync(user);
-            var roleClaims = roles.Select(role => new Claim(ClaimTypes.Role, role));
-            claims.AddRange(roleClaims);
+
+            var roleNames = await this.userManager.GetRolesAsync(user);
+            claims.Add(new Claim("Roles", string.Join(",", roleNames)));
+            foreach (var roleName in roleNames)
+            {
+                var role = await this.roleManager.FindByNameAsync(roleName);
+
+                claims.Add(new Claim(ClaimTypes.Role, role.Name));
+
+                var permissionClaims = role.Permissions.Select(permission => new Claim("identity/permissions", permission)).ToArray();
+                claims.AddRange(permissionClaims);
+            }
 
             return claims;
         }

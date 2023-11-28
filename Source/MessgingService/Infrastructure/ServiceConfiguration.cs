@@ -19,7 +19,7 @@ namespace MessgingService.Infrastructure
                 TransportType = ServiceBusTransportType.AmqpWebSockets
             });
             var sender = client.CreateSender(queueOrTopicName);
-            services.AddSingleton<IPublisher>(new Publisher(sender));
+            services.AddSingleton<IPublisher>(new Publisher(null));
         }
 
         public static void AddCatalogMessagesReceiver(
@@ -41,9 +41,9 @@ namespace MessgingService.Infrastructure
             {
                 AutoCompleteMessages = false,
             });
-            var receiver = new Receiver(processor);
+            var receiver = new Receiver(null);
             services.AddSingleton<IReceiver>(receiver);
-            receiver.AssignProcessorAndStartProcessAsync(messageProcessors, messageErrorProcessors).GetAwaiter().GetResult();
+            //receiver.AssignProcessorAndStartProcessAsync(messageProcessors, messageErrorProcessors).GetAwaiter().GetResult();
         }
     }
 }

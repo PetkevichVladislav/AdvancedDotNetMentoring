@@ -1,4 +1,4 @@
-﻿namespace IdentityService.Models
+﻿namespace IdentityService.Models.Requests
 {
     public record LoginRequest
     {

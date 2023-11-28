@@ -1,8 +1,11 @@
 using Azure.Messaging.ServiceBus;
 using CatalogService.BusinessLogic.DTO;
 using CatalogService.BusinessLogic.Services.Interfaces;
+using IdentityService.SDK.Infrastructure.Attributes;
 using MessgingService.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using IdentityService.SDK.Models.Permissions;
 
 namespace CartingService.API.Controllers
 {
@@ -13,16 +16,14 @@ namespace CartingService.API.Controllers
     [Route("[controller]")]
     public class CategoryController : ControllerBase
     {
-        private readonly Receiver _reciever;
         private readonly ILogger<CategoryController> logger;
         private readonly ICategoryService categoryService;
 
         /// <summary>
         /// Creates instance of <see cref="CategoryController"/>
         /// </summary>
-        public CategoryController(Receiver reciever, ILogger<CategoryController> logger, ICategoryService categoryService)
+        public CategoryController(ILogger<CategoryController> logger, ICategoryService categoryService)
         {
-            _reciever = reciever;
             this.logger = logger;
             this.categoryService = categoryService;
         }
@@ -32,6 +33,8 @@ namespace CartingService.API.Controllers
         /// </summary>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A collection of categorires.</returns>
+        [Authorize]
+        [Permission(CatalogPermission.Read)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetAllAsync(CancellationToken cancellationToken = default)
         {
@@ -46,6 +49,8 @@ namespace CartingService.API.Controllers
         /// <param name="id">Category primary key.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns><see cref="Category"/> or null.</returns>
+        [Authorize]
+        [Permission(CatalogPermission.Read)]
         [HttpGet("{id}")]
         public async Task<ActionResult<Category>> GetAsync([FromRoute] int id, CancellationToken cancellationToken = default)
         {
@@ -60,6 +65,8 @@ namespace CartingService.API.Controllers
         /// <param name="category"><see cref="Category"/> to create.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns><see cref="Category"/></returns>
+        [Authorize]
+        [Permission(CatalogPermission.Create)]
         [HttpPost]
         public async Task<ActionResult<Category>> AddAsync([FromBody] Category category, CancellationToken cancellationToken = default)
         {
@@ -73,7 +80,9 @@ namespace CartingService.API.Controllers
         /// </summary>
         /// <param name="category"><see cref="Category"/> to update.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns><see cref="Category"/></returns>
+        /// <returns><see cref="Category"/></returns
+        [Authorize]
+        [Permission(CatalogPermission.Update)]
         [HttpPut]
         public async Task<ActionResult<Category>> UpdateAsync([FromBody] Category category, CancellationToken cancellationToken = default)
         {
@@ -88,6 +97,8 @@ namespace CartingService.API.Controllers
         /// <param name="id">Category primary key.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns><see cref="Category"/></returns>
+        [Authorize]
+        [Permission(CatalogPermission.Delete)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAsync([FromRoute] int id, CancellationToken cancellationToken = default)
         {

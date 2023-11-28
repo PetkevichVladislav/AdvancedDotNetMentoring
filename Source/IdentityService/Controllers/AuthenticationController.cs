@@ -1,17 +1,17 @@
 using IdentityService.BusinessLogic.Interfaces;
-using IdentityService.Models;
+using IdentityService.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityService.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AuthorizationController : ControllerBase
+    public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService authorizationService;
         private readonly ITokenService tokenService;
 
-        public AuthorizationController(ILogger<AuthorizationController> logger, IAuthenticationService authorizationService, ITokenService tokenService)
+        public AuthenticationController(IAuthenticationService authorizationService, ITokenService tokenService)
         {
             this.authorizationService = authorizationService;
             this.tokenService = tokenService;
@@ -25,7 +25,7 @@ namespace IdentityService.Controllers
                 return BadRequest();
             }
 
-            var result = await authorizationService.LogIn(request.Username, request.Password);
+            var result = await authorizationService.AuthenticateUser(request.Username, request.Password);
 
             return Ok(result);
         }
@@ -38,7 +38,7 @@ namespace IdentityService.Controllers
                 return BadRequest();
             }
 
-            var result = await authorizationService.Register(request.Username, request.Password, request.Email);
+            var result = await authorizationService.CreateUser(request.Username, request.Password, request.Email);
 
             return Ok(result);
         }

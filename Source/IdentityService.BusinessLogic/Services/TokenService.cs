@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using IdentityService.BusinessLogic.Interfaces;
 using IdentityService.BusinessLogic.Models;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using TokenValidationResult = IdentityService.BusinessLogic.Models.Enums.TokenValidationResult;
 
@@ -89,7 +90,7 @@ namespace IdentityService.BusinessLogic.Services
                 try
                 {
                     tokenValidationParameters.ValidateLifetime = true;
-                    tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
+                    var jwt = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
                     return TokenValidationResult.Valid;
                 }
                 catch (SecurityTokenExpiredException exception)
