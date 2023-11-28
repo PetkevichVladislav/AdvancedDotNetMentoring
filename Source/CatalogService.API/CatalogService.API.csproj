@@ -1,13 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.12" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
@@ -16,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CatalogService.BusinessLogic\CatalogService.BusinessLogic.csproj" />
     <ProjectReference Include="..\CatalogService.DataAccess\CatalogService.DataAccess.csproj" />
+    <ProjectReference Include="..\IdentityService.SDK\IdentityService.SDK.csproj" />
     <ProjectReference Include="..\MessgingService\MessagingService.csproj" />
   </ItemGroup>
 
