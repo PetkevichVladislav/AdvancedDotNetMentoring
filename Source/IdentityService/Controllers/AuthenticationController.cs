@@ -65,12 +65,12 @@ namespace IdentityService.Controllers
             return Ok(publicKey);
         }
 
-        [HttpGet("test")]
-        public IActionResult Vaidate(string token)
+        [HttpGet("validate-token")]
+        public IActionResult ValidateToken(string token)
         {
-            var publicKey = tokenService.ValidateToken(token);
+            var validationResult = tokenService.ValidateToken(token);
 
-            return Ok(publicKey);
+            return Ok(validationResult.ToString());
         }
     }
 }
