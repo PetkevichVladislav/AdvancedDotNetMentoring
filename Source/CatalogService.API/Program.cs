@@ -1,4 +1,5 @@
 using System.Reflection;
+using IdentityService.SDK.Infrastructure.ServiceConfiguration;
 using CatalogService.BusinessLogic.Infrastructure;
 using CatalogService.DataAccess.DatabaseContexts.MsSql;
 using MessgingService.Infrastructure;
@@ -13,6 +14,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCatalogServices();
 builder.Services.AddDbContext<CatalogDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CatalogDb")));
 builder.Services.AddCatalogMessagesPublisher(builder.Configuration);
+builder.Services.AddAuthenticationAndAuthorization(builder.Configuration);
 
 builder.Services.AddSwaggerGen(config =>
 {
@@ -25,18 +27,16 @@ builder.Services.AddSwaggerGen(config =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-
 app.UseHttpsRedirection();
-
+app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

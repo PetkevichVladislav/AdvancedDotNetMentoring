@@ -1,5 +1,8 @@
 ﻿using CatalogService.BusinessLogic.DTO;
 using CatalogService.BusinessLogic.Services.Interfaces;
+using IdentityService.SDK.Infrastructure.Attributes;
+using IdentityService.SDK.Models.Permissions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CatalogService.API.Controllers
@@ -31,6 +34,8 @@ namespace CatalogService.API.Controllers
         /// <param name="to">Takes quantity of categories.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Collection with categories or empty.</returns>
+        [Authorize]
+        [Permission(CatalogPermission.Read)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetAllAsync([FromQuery] int? categoryId, [FromQuery] int? from, [FromQuery] int? to, CancellationToken cancellationToken)
         {
@@ -45,6 +50,8 @@ namespace CatalogService.API.Controllers
         /// <param name="product"><see cref="Product"/> to create.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns><see cref="Product"/></returns>
+        [Authorize]
+        [Permission(CatalogPermission.Create)]
         [HttpPost]
         public async Task<ActionResult<Product>> AddAsync([FromBody] Product product, CancellationToken cancellationToken)
         {
@@ -58,7 +65,9 @@ namespace CatalogService.API.Controllers
         /// </summary>
         /// <param name="product"><see cref="Product"/> to update.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns><see cref="Product"/></returns>
+        /// <returns><see cref="Product"/></returns
+        [Authorize]
+        [Permission(CatalogPermission.Update)]
         [HttpPut]
         public async Task<ActionResult<Product>> UpdateAsync([FromBody] Product product, CancellationToken cancellationToken)
         {
@@ -72,6 +81,8 @@ namespace CatalogService.API.Controllers
         /// </summary>
         /// <param name="id">Product primary key.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
+        [Authorize]
+        [Permission(CatalogPermission.Delete)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAsync(int id, CancellationToken cancellationToken)
         {

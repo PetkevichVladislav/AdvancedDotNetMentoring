@@ -1,5 +1,7 @@
 using CartingService.BusinessLogicLayer.DTO;
 using CartingService.BusinessLogicLayer.Services.Interfaces;
+using IdentityService.SDK.Models.Roles;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CartingService.API.Controllers
@@ -7,6 +9,7 @@ namespace CartingService.API.Controllers
     [ApiController]
     [ApiVersion("2")]
     [ApiVersion("1")]
+    [Authorize(Roles = $"{Role.Manager},{Role.Buyer}")]
     [Route("/v{version:apiVersion}/[controller]")]
     public class CartController : ControllerBase
     {

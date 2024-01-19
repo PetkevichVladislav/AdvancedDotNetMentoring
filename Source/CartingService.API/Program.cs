@@ -4,6 +4,7 @@ using CartingService.API.Infrastructure.Middleware.ExceptionMiddleware;
 using CartingService.API.Infrastructure.Swagger;
 using CartingService.BusinessLogicLayer.Services.Interfaces;
 using CartingService.Infrastructure;
+using IdentityService.SDK.Infrastructure.ServiceConfiguration;
 using MessgingService.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -27,6 +28,7 @@ builder.Services.AddApiVersioning(options =>
 });
 
 var serviceProvider = builder.Services.BuildServiceProvider();
+builder.Services.AddAuthenticationAndAuthorization(builder.Configuration);
 builder.Services.AddCatalogMessagesReceiver(builder.Configuration, 
     new List<Func<ProcessMessageEventArgs, Task>>
     {
@@ -44,8 +46,11 @@ ILogger logger = loggerFactory.CreateLogger<Program>();
 
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseJwtLoggingMiddleware();
 app.UseCartingSwagger();
 app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
