@@ -27,7 +27,8 @@ builder.Services.AddApiVersioning(options =>
 });
 
 var serviceProvider = builder.Services.BuildServiceProvider();
-builder.Services.AddCatalogMessagesReceiver(builder.Configuration, 
+builder.Services.AddApplicationInsightsTelemetry();
+builder.Services.AddCatalogMessagesReceiver(builder.Configuration,
     new List<Func<ProcessMessageEventArgs, Task>>
     {
         serviceProvider.GetRequiredService<IMessagesReceiverService>().HandleMessageWithUpdateLineItemMessage,

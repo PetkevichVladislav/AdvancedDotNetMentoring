@@ -14,6 +14,7 @@ builder.Services.AddCatalogServices();
 builder.Services.AddDbContext<CatalogDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CatalogDb")));
 builder.Services.AddCatalogMessagesPublisher(builder.Configuration);
 
+builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddSwaggerGen(config =>
 {
     config.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
